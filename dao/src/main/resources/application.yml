@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  redis:
+    database: 2
+    host: 10.0.41.145
+    port: 6379
+    password: poembro
+    lettuce:
+      pool:
+        min-idle: 0
+        max-active: 8
+        max-idle: 8
+        max-wait: -1ms
+    connect-timeout: 30000ms
+  datasource:
+    url: jdbc:mysql://10.0.41.145:3306/openresty_china?useSSL=false&autoReconnect=true&characterEncoding=utf8
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: poembro
+
+mybatis-plus:
+  configuration:
+    cache-enabled: true
+    use-generated-keys: true
+    default-executor-type: REUSE
+    use-actual-param-name: true

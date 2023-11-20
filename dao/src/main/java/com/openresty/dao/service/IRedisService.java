@@ -1,42 +1,60 @@
 package com.openresty.dao.service;
 
-import org.springframework.data.redis.core.RedisCallback;
+import java.util.Map;
+import java.util.List;
 
-import java.util.Collection;
-import java.util.Set;
-
+import com.openresty.common.utils.PageResult;
+import com.openresty.dao.entity.Topic;
 /**
  * Redis Service.
  *
  * @author pdai
  */
-public interface IRedisService<T> {
+public interface IRedisService {
+    PageResult<Topic> getBlogInfoPageResultByHash(String hash, Integer pageNum);
 
-    void set(String key, T value);
+/*
+    public void set(String key, Object value, long time);
 
-    void set(String key, T value, long time);
+    public Object get(String key);
+*/
+    void saveKVToHash(String hash, Object key, Object value);
 
-    T get(String key);
+    void saveMapToHash(String hash, Map map);
 
-    void delete(String key);
+    Map getMapByHash(String hash);
 
-    void delete(Collection<String> keys);
+    Object getValueByHashKey(String hash, Object key);
 
-    boolean expire(String key, long time);
+    void incrementByHashKey(String hash, Object key, int increment);
 
-    Long getExpire(String key);
+    void deleteByHashKey(String hash, Object key);
+
+    <T> List<T> getListByValue(String key);
+
+    <T> void saveListToValue(String key, List<T> list, long ttl);
+
+    <T> Map<String, T> getMapByValue(String key);
+
+    <T> void saveMapToValue(String key, Map<String, T> map);
+
+    <T> T getObjectByValue(String key, Class t);
+
+    void incrementByKey(String key, int increment);
+
+    void saveObjectToValue(String key, Object object, long ttl);
+
+    void saveValueToSet(String key, Object value);
+
+    int countBySet(String key);
+
+    void deleteValueBySet(String key, Object value);
+
+    boolean hasValueInSet(String key, Object value);
+
+    void deleteCacheByKey(String key);
 
     boolean hasKey(String key);
 
-    Long increment(String key, long delta);
-
-    Long decrement(String key, long delta);
-
-    void addSet(String key, T value);
-
-    Set<T> getSet(String key);
-
-    void deleteSet(String key, T value);
-
-    T execute(RedisCallback<T> redisCallback);
+    void expire(String key, long time);
 }

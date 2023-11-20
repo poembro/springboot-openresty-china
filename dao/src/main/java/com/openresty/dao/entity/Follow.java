@@ -2,9 +2,12 @@ package com.openresty.dao.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+import java.util.Date;
 /**
  * <p>
  * 
@@ -13,6 +16,9 @@ import java.time.LocalDateTime;
  * @author poembro
  * @since 2023-11-15
  */
+@Data
+@Accessors(chain = true)
+@TableName("follow")
 public class Follow implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -24,7 +30,7 @@ public class Follow implements Serializable {
 
     private Integer toId;
 
-    private LocalDateTime createTime;
+    private Date createTime;
 
 
     public Integer getId() {
@@ -51,11 +57,11 @@ public class Follow implements Serializable {
         this.toId = toId;
     }
 
-    public LocalDateTime getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(LocalDateTime createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 

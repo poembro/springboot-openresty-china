@@ -1,6 +1,6 @@
 package com.openresty.dao.service;
 
-import com.openresty.dao.common.utils.PageResult;
+import com.openresty.common.utils.PageResult;
 import com.openresty.dao.entity.Topic;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -15,6 +15,8 @@ import java.util.List;
  * @since 2023-11-15
  */
 public interface ITopicService extends IService<Topic> {
-    public List<Topic> find() ;
-    public List<Topic> getTopicList(Integer pageNum);
+    public PageResult<Topic> findList(Integer pageNum, Integer pageSize) ;
+    public List<Topic> findListByTitle(String title);
+    public Topic selectById(Integer id);
+    public void del(Integer id);
 }

@@ -1,6 +1,6 @@
 package com.openresty.bbs.config;
 
-import com.openresty.dao.common.utils.JwtUtils;
+import com.openresty.common.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;

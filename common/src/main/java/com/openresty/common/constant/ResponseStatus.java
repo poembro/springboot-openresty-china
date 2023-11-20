@@ -1,4 +1,4 @@
-package com.openresty.dao.constant;
+package com.openresty.common.constant;
 
 
 import lombok.AllArgsConstructor;

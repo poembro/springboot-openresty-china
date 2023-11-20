@@ -1,4 +1,4 @@
-package com.openresty.dao.common.utils;
+package com.openresty.common.utils;
 
 
 import io.jsonwebtoken.Claims;

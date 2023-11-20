@@ -1,6 +1,6 @@
 package com.openresty.bbs.config;
 
-import com.openresty.dao.service.impl.LoginServiceImpl;
+import com.openresty.dao.service.impl.AuthServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 // @EnableWebSecurity  // 注解启用了 Web 安全。
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
-	LoginServiceImpl userService;
+	AuthServiceImpl userService;
 
 
 
@@ -51,21 +51,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 		.authorizeRequests()
 
-		// 对于登录接口 允许匿名访问
-		.antMatchers("/hello").anonymous() // 匿名
+		.antMatchers("/admin/login").anonymous() // 对于登录接口 允许匿名访问
+
+		.antMatchers("/doc.html").anonymous() // swagger 放行
+		.antMatchers("/webjars/**").anonymous() // swagger 放行
+		.antMatchers("/swagger-resources/**").anonymous() // swagger 放行
+		.antMatchers("/v3/**").anonymous() // swagger 放行
+
 		// .antMatchers("/hello").denyAll() // 拦截所有
 		//任何 /v1 开头的路径下的请求都需要经过JWT验证
 		//.antMatchers(HttpMethod.GET, "/v1/**").hasAnyRole("admin")
 		//.antMatchers("/v1/**").hasAnyRole("admin")
+
 		//.anyRequest().permitAll()	 //其它路径全部放行
 		.anyRequest().authenticated() //  其他全部验证授权
 		.and()
 		// 自定义JWT过滤器
 		.addFilterBefore(new JwtLoginFilter("/admin/login", authenticationManager(), userService), UsernamePasswordAuthenticationFilter.class)
-		//        添加JWT过滤器，在UsernamePasswordAuthenticationFilter之前添加
+		// 添加JWT过滤器，在UsernamePasswordAuthenticationFilter之前添加
 		.addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
-		// 配置异常处理器  未登录时，返回json，在前端执行重定向
-		.exceptionHandling().authenticationEntryPoint(myAuthenticationEntryPoint);
+		.exceptionHandling().authenticationEntryPoint(myAuthenticationEntryPoint);// 配置异常处理器  未登录时，返回json，在前端执行重定向
 	}
 
 

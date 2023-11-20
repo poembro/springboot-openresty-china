@@ -8,8 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-
+import java.util.Date;
 /**
  * <p>
  * 
@@ -30,7 +29,7 @@ public class Category implements Serializable {
 
     private String name;
 
-    private LocalDateTime createTime;
+    private Date createTime;
 
 
     public Integer getId() {
@@ -49,11 +48,11 @@ public class Category implements Serializable {
         this.name = name;
     }
 
-    public LocalDateTime getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(LocalDateTime createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 

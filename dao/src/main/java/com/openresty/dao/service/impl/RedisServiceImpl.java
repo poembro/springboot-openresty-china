@@ -1,95 +1,165 @@
 package com.openresty.dao.service.impl;
 
+import com.openresty.common.utils.JacksonUtils;
+import com.openresty.common.utils.PageResult;
 import com.openresty.dao.service.IRedisService;
-import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import java.util.Collection;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-import java.util.List;
 
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+
+import com.openresty.dao.entity.Topic;
 /**
- * @author pdai
+ * @Description: 读写Redis相关操作
+ * @Author: Naccl
+ * @Date: 2020-09-27
  */
 @Service
-public class RedisServiceImpl<T> implements IRedisService<T> {
+public class RedisServiceImpl implements IRedisService {
 
-    @Resource
-    private RedisTemplate<String, T> redisTemplate;
+    @Autowired
+    RedisTemplate jsonRedisTemplate;
 
     @Override
-    public void set(String key, T value, long time) {
-        redisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);
+    public PageResult<Topic> getBlogInfoPageResultByHash(String hash, Integer pageNum) {
+        if (jsonRedisTemplate.opsForHash().hasKey(hash, pageNum)) {
+            Object redisResult = jsonRedisTemplate.opsForHash().get(hash, pageNum);
+            PageResult<Topic> pageResult = JacksonUtils.convertValue(redisResult, PageResult.class);
+            return pageResult;
+        } else {
+            return null;
+        }
+    }
+
+/*
+    @Override
+    public void set(String key, Object value, long time) {
+        jsonRedisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);
+    }
+
+
+
+    @Override
+    public Object get(String key) {
+        return jsonRedisTemplate.opsForValue().get(key);
+    }
+*/
+
+    // hash 结构中的 某个key 自增 比如 浏览量
+    @Override
+    public void saveKVToHash(String hash, Object key, Object value) {
+        jsonRedisTemplate.opsForHash().put(hash, key, value);
+    }
+
+    // hash 结构中的 某个key 自增 比如 浏览量
+    @Override
+    public Object getValueByHashKey(String hash, Object key) {
+        return jsonRedisTemplate.opsForHash().get(hash, key);
     }
 
     @Override
-    public void set(String key, T value) {
-        redisTemplate.opsForValue().set(key, value);
+    public void saveMapToHash(String hash, Map map) {
+        jsonRedisTemplate.opsForHash().putAll(hash, map);
     }
 
     @Override
-    public T get(String key) {
-        return redisTemplate.opsForValue().get(key);
+    public Map getMapByHash(String hash) {
+        return jsonRedisTemplate.opsForHash().entries(hash);
     }
 
-
-
+    // hash 结构中的 某个key 自增 比如 浏览量
     @Override
-    public void delete(String key) {
-        redisTemplate.delete(key);
-    }
-
-    @Override
-    public void delete(Collection<String> keys) {
-        redisTemplate.delete(keys);
+    public void incrementByHashKey(String hash, Object key, int increment) {
+        if (increment < 0) {
+            throw new RuntimeException("递增因子必须大于0");
+        }
+        jsonRedisTemplate.opsForHash().increment(hash, key, increment);
     }
 
     @Override
-    public boolean expire(String key, long time) {
-        return redisTemplate.expire(key, time, TimeUnit.SECONDS);
+    public void deleteByHashKey(String hash, Object key) {
+        jsonRedisTemplate.opsForHash().delete(hash, key);
     }
 
     @Override
-    public Long getExpire(String key) {
-        return redisTemplate.getExpire(key, TimeUnit.SECONDS);
+    public <T> List<T> getListByValue(String key) {
+        List<T> redisResult = (List<T>) jsonRedisTemplate.opsForValue().get(key);
+        return redisResult;
+    }
+
+    @Override
+    public <T> void saveListToValue(String key, List<T> list, long ttl) {
+        jsonRedisTemplate.opsForValue().set(key, list, ttl,TimeUnit.SECONDS);
+    }
+
+    @Override
+    public <T> Map<String, T> getMapByValue(String key) {
+        Map<String, T> redisResult = (Map<String, T>) jsonRedisTemplate.opsForValue().get(key);
+        return redisResult;
+    }
+
+    @Override
+    public <T> void saveMapToValue(String key, Map<String, T> map) {
+        jsonRedisTemplate.opsForValue().set(key, map);
+    }
+
+    @Override
+    public <T> T getObjectByValue(String key, Class t) {
+        Object redisResult = jsonRedisTemplate.opsForValue().get(key);
+        T object = (T) JacksonUtils.convertValue(redisResult, t);
+        return object;
+    }
+
+    @Override
+    public void incrementByKey(String key, int increment) {
+        if (increment < 0) {
+            throw new RuntimeException("递增因子必须大于0");
+        }
+        jsonRedisTemplate.opsForValue().increment(key, increment);
+    }
+
+    @Override
+    public void saveObjectToValue(String key, Object object, long ttl) {
+        jsonRedisTemplate.opsForValue().set(key, object, ttl,TimeUnit.SECONDS);
+    }
+
+    @Override
+    public void saveValueToSet(String key, Object value) {
+        jsonRedisTemplate.opsForSet().add(key, value);
+    }
+
+    @Override
+    public int countBySet(String key) {
+        return jsonRedisTemplate.opsForSet().size(key).intValue();
+    }
+
+    @Override
+    public void deleteValueBySet(String key, Object value) {
+        jsonRedisTemplate.opsForSet().remove(key, value);
+    }
+
+    @Override
+    public boolean hasValueInSet(String key, Object value) {
+        return jsonRedisTemplate.opsForSet().isMember(key, value);
+    }
+
+    @Override
+    public void deleteCacheByKey(String key) {
+        jsonRedisTemplate.delete(key);
     }
 
     @Override
     public boolean hasKey(String key) {
-        return redisTemplate.hasKey(key);
+        return jsonRedisTemplate.hasKey(key);
     }
 
     @Override
-    public Long increment(String key, long delta) {
-        return redisTemplate.opsForValue().increment(key, delta);
+    public void expire(String key, long time) {
+        jsonRedisTemplate.expire(key, time, TimeUnit.SECONDS);
     }
-
-    @Override
-    public Long decrement(String key, long delta) {
-        return redisTemplate.opsForValue().increment(key, -delta);
-    }
-
-    @Override
-    public void addSet(String key, T value) {
-        redisTemplate.opsForSet().add(key, value);
-    }
-
-    @Override
-    public Set<T> getSet(String key) {
-        return redisTemplate.opsForSet().members(key);
-    }
-
-    @Override
-    public void deleteSet(String key, T value) {
-        redisTemplate.opsForSet().remove(key, value);
-    }
-
-    @Override
-    public T execute(RedisCallback<T> redisCallback) {
-        return redisTemplate.execute(redisCallback);
-    }
-
 }

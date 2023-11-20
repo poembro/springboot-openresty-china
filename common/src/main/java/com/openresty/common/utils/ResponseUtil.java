@@ -1,6 +1,6 @@
-package com.openresty.dao.common.utils;
+package com.openresty.common.utils;
 
-import com.openresty.dao.constant.ResponseStatus;
+import com.openresty.common.constant.ResponseStatus;
 import lombok.Builder;
 import lombok.Data;
 
@@ -29,6 +29,8 @@ public class ResponseUtil<T> {
      * response data.
      */
     private T data;
+
+
 
     /**
      * response success result wrapper.

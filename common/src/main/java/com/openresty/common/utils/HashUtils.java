@@ -1,4 +1,4 @@
-package com.openresty.dao.common.utils;
+package com.openresty.common.utils;
 
 import cn.hutool.core.lang.hash.MurmurHash;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

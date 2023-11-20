@@ -1,4 +1,4 @@
-package com.openresty.dao.common.utils;
+package com.openresty.common.utils;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

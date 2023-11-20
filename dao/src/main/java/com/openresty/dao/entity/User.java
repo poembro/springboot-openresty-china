@@ -2,14 +2,19 @@ package com.openresty.dao.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import lombok.NoArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+import lombok.experimental.Accessors;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Date;
 /**
  * <p>
  * 
@@ -22,7 +27,10 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class User implements  Serializable {
+@Data
+@Accessors(chain = true)
+@TableName("user")
+public class User implements UserDetails {
     private static final long serialVersionUID = 1L;
 
       @TableId(value = "id", type = IdType.AUTO)
@@ -34,7 +42,7 @@ public class User implements  Serializable {
 
     private String avatar;
 
-    private LocalDateTime createTime;
+    private Date createTime;
 
     private String city;
 
@@ -55,126 +63,37 @@ public class User implements  Serializable {
     private Integer isAdmin;
 
 
-    public Integer getId() {
-        return id;
+
+
+
+
+
+    ////////////////////实现UserDetails抽象方法////////////////////
+    @JsonIgnore
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorityList = new ArrayList<>();
+        authorityList.add(new SimpleGrantedAuthority("admin"));
+        return authorityList;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public String getUsername() {
-        return username;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getWebsite() {
-        return website;
-    }
-
-    public void setWebsite(String website) {
-        this.website = website;
-    }
-
-    public String getCompany() {
-        return company;
-    }
-
-    public void setCompany(String company) {
-        this.company = company;
-    }
-
-    public String getSign() {
-        return sign;
-    }
-
-    public void setSign(String sign) {
-        this.sign = sign;
-    }
-
-    public String getGithub() {
-        return github;
-    }
-
-    public void setGithub(String github) {
-        this.github = github;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Integer getEmailPublic() {
-        return emailPublic;
-    }
-
-    public void setEmailPublic(Integer emailPublic) {
-        this.emailPublic = emailPublic;
-    }
-
-    public Integer getIsAdmin() {
-        return isAdmin;
-    }
-
-    public void setIsAdmin(Integer isAdmin) {
-        this.isAdmin = isAdmin;
-    }
-
-    
-    public String toString() {
-        return "User{" +
-        "id=" + id +
-        ", username=" + username +
-        ", password=" + password +
-        ", avatar=" + avatar +
-        ", createTime=" + createTime +
-        ", city=" + city +
-        ", website=" + website +
-        ", company=" + company +
-        ", sign=" + sign +
-        ", github=" + github +
-        ", email=" + email +
-        ", emailPublic=" + emailPublic +
-        ", isAdmin=" + isAdmin +
-        "}";
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

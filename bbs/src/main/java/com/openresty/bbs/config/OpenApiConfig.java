@@ -1,7 +1,7 @@
 package com.openresty.bbs.config;
 
 import com.github.xiaoymin.knife4j.spring.extension.OpenApiExtensionResolver;
-import com.openresty.dao.constant.ResponseStatus;
+import com.openresty.common.constant.ResponseStatus;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

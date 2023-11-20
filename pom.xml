@@ -17,8 +17,9 @@
 
     <packaging>pom</packaging>
     <modules>
-        <module>bbs</module>
+        <module>common</module>
         <module>dao</module>
+        <module>bbs</module>
     </modules>
 
 

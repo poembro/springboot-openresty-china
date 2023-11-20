@@ -36,7 +36,7 @@ public class AppConfig {
      * redis template.
      * @param factory factory
      * @return RedisTemplate
-     */
+
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
@@ -47,5 +47,5 @@ public class AppConfig {
         template.afterPropertiesSet();
         return template;
     }
-
+     */
 }

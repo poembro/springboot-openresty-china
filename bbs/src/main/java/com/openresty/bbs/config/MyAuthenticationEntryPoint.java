@@ -1,5 +1,7 @@
 package com.openresty.bbs.config;
 
+import com.openresty.common.utils.JacksonUtils;
+import com.openresty.common.utils.Result;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -26,7 +28,9 @@ public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
 			response.setContentType("application/json;charset=utf-8");
 			PrintWriter out = response.getWriter();
-			out.write("请登录");
+			Result result = Result.create(403, "请登录");
+			out.write(JacksonUtils.writeValueAsString(result));
+
 			out.flush();
 			out.close();
 

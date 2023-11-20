@@ -7,8 +7,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-
+import java.util.Date;
 /**
  * <p>
  * 
@@ -67,12 +66,12 @@ public class Topic implements Serializable {
     //@ApiModelProperty("权重")
     private Integer weight;
 
-    private LocalDateTime lastReplyTime;
+    private Date lastReplyTime;
 
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
    // @ApiModelProperty("创建时间")
-    private LocalDateTime createTime;
+    private Date createTime;
 
 
     public Integer getId() {
@@ -195,27 +194,27 @@ public class Topic implements Serializable {
         this.weight = weight;
     }
 
-    public LocalDateTime getLastReplyTime() {
+    public Date getLastReplyTime() {
         return lastReplyTime;
     }
 
-    public void setLastReplyTime(LocalDateTime lastReplyTime) {
+    public void setLastReplyTime(Date lastReplyTime) {
         this.lastReplyTime = lastReplyTime;
     }
 
-    public LocalDateTime getUpdateTime() {
+    public Date getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(LocalDateTime updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
 
-    public LocalDateTime getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(LocalDateTime createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 

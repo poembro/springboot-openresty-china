@@ -1,10 +1,12 @@
 package com.openresty.bbs.config;
 
-import com.openresty.dao.common.exception.BadRequestException;
-import com.openresty.dao.common.utils.JacksonUtils;
-import com.openresty.dao.common.utils.JwtUtils;
-import com.openresty.dao.common.utils.Result;
-import com.openresty.dao.service.impl.LoginServiceImpl;
+import com.openresty.common.exception.BadRequestException;
+import com.openresty.common.utils.JacksonUtils;
+import com.openresty.common.utils.JwtUtils;
+import com.openresty.common.utils.Result;
+
+import com.openresty.dao.service.impl.AuthServiceImpl;
+import com.openresty.dao.entity.User;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,6 +16,7 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -32,9 +35,9 @@ import java.util.Map;
  * @Date: 2020-07-21
  */
 public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
-	LoginServiceImpl userService;
+	AuthServiceImpl userService;
 
-	protected JwtLoginFilter(String defaultFilterProcessesUrl, AuthenticationManager authenticationManager ,LoginServiceImpl userService) {
+	protected JwtLoginFilter(String defaultFilterProcessesUrl, AuthenticationManager authenticationManager , AuthServiceImpl userService) {
 		super(new AntPathRequestMatcher(defaultFilterProcessesUrl));
 		setAuthenticationManager(authenticationManager);
 
@@ -48,10 +51,10 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 			if (!"POST".equals(request.getMethod())) {
 				throw new BadRequestException("请求方法错误");
 			}
-			// User user = JacksonUtils.readValue(request.getInputStream(), User.class);
+			User user = JacksonUtils.readValue(request.getInputStream(), User.class);
 
-			String username = "test";// user.getUsername();
-			String password = "123456";//user.getPassword();
+			String username = user.getUsername();
+			String password =  user.getPassword();
 
 			System.out.println("-----默认---->" + username + "          " + password);
 			// 明文密码 暂时存起来
@@ -76,7 +79,6 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 		System.out.println("-----准备生成token ---->" + username);
 		String jwt = JwtUtils.generateToken(username, authResult.getAuthorities());
 
-
 		response.setContentType("application/json;charset=utf-8");
 		Map<String, Object> map = new HashMap<>(4);
 		map.put("user", username);
@@ -86,7 +88,6 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 		out.write(JacksonUtils.writeValueAsString(result));
 		out.flush();
 		out.close();
-
 	}
 
 	@Override
@@ -111,7 +112,6 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 		out.write(JacksonUtils.writeValueAsString(Result.create(401, msg)));
 		out.flush();
 		out.close();
-
 	}
 
 }

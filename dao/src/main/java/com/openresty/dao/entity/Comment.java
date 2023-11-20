@@ -2,8 +2,16 @@ package com.openresty.dao.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+import lombok.experimental.Accessors;
+
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
+
+@Data
+@Accessors(chain = true)
+@TableName("comment")
 public class Comment implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -15,7 +23,7 @@ public class Comment implements Serializable {
 
     private Integer userId;
 
-    private LocalDateTime createTime;
+    private Date createTime;
 
     private String content;
 
@@ -44,11 +52,11 @@ public class Comment implements Serializable {
         this.userId = userId;
     }
 
-    public LocalDateTime getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(LocalDateTime createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 

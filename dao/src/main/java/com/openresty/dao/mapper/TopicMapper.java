@@ -16,7 +16,11 @@ import java.util.List;
 @Mapper
 public interface TopicMapper extends BaseMapper<Topic> {
     //查询所有用户
-    @Select("select * from topic limit 10")
-    List<Topic> find();
+    @Select("select * from topic limit #{pageNum},#{pageSize}")
+    List<Topic> findList(Integer pageNum, int pageSize);
+
+    @Select("select count(id) from topic ")
+    Long findCount();
+
 
 }

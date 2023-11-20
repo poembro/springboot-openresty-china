@@ -1,4 +1,4 @@
-package com.openresty.dao.common.exception;
+package com.openresty.common.exception;
 
 /**
  * @Description: 非法请求异常

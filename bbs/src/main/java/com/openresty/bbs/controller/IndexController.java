@@ -33,20 +33,20 @@ public class IndexController {
 
     // 登录   1.先注入 2.调用登录
     @Autowired
-    AuthServiceImpl loginService;
+    AuthServiceImpl authService;
 
     @Autowired     // 1. 字段注入
     private IUserService userService;
     @ApiOperation("login 获取token")
     @GetMapping("/login")
     public Result login(@RequestParam(defaultValue = "1") Integer userId) {
-        User user = userService.getById(userId);
-        String newPwd =  passwordEncoder.encode(user.getPassword());
-        user.setPassword(newPwd);
-        userService.updateById(user);
+        User item = userService.getById(userId);
+        String newPwd =  passwordEncoder.encode(item.getPassword());
+        item.setPassword(newPwd);
+        userService.updateById(item);
 
-        String item = loginService.login(user);
-        return  Result.ok("hello world " , item);
+        User resp = authService.findUserByName(item.getUsername());
+        return  Result.ok("hello world " , resp);
     }
 
 

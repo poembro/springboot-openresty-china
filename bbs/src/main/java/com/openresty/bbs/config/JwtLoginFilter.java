@@ -74,14 +74,15 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 	                                        FilterChain chain, Authentication authResult) throws IOException {
-
 		String username = authResult.getName();
-		System.out.println("-----准备生成token ---->" + username);
-		String jwt = JwtUtils.generateToken(username, authResult.getAuthorities());
+		User item = userService.findUserByName(username);
+		String jwt = JwtUtils.generateToken(item.getId(), username, authResult.getAuthorities());
+
+		System.out.println("-----生成token ---->" + username);
 
 		response.setContentType("application/json;charset=utf-8");
 		Map<String, Object> map = new HashMap<>(4);
-		map.put("user", username);
+		map.put("user", item);
 		map.put("token", jwt);
 		Result result = Result.ok("登录成功", map);
 		PrintWriter out = response.getWriter();

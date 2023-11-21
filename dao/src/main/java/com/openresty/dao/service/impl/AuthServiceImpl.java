@@ -1,8 +1,8 @@
 package com.openresty.dao.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.openresty.dao.entity.User;
 import com.openresty.dao.mapper.UserMapper;
-import com.openresty.dao.service.IRedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -39,16 +39,16 @@ public class AuthServiceImpl implements UserDetailsService{
         return item;
     }
 
-    public String login(User user) {
-        //authenticate存入redis
-        //把token响应给前端
-        // HashMap<String,String> map = new HashMap<>();
-        // map.put("token",jwt);
-        return "";
+    public User findUserByName(String username) {
+        // 根据用户名查询用户信息
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getUsername, username);
+        User item = mp.selectOne(wrapper);
+        if (Objects.isNull(item)) {
+            throw new UsernameNotFoundException("用户不存在");
+        }
+        return item;
     }
 
-    public boolean logout() {
-        //  删除redis中的值
-        return true;
-    }
+
 }

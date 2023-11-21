@@ -50,6 +50,7 @@ public class JwtFilter extends GenericFilterBean {
 
 				System.out.println("---验证token---username--"+username + "-------" + role);
 
+				// https://www.cnblogs.com/yinjihuan/p/10888879.html
 				return;
 			} catch (Exception e) {
 				e.printStackTrace();

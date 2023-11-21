@@ -33,7 +33,7 @@ import java.util.Date;
 public class User implements UserDetails {
     private static final long serialVersionUID = 1L;
 
-      @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     private String username;
@@ -61,9 +61,6 @@ public class User implements UserDetails {
 
    // @ApiModelProperty("1管理员，0普通用户")
     private Integer isAdmin;
-
-
-
 
 
 

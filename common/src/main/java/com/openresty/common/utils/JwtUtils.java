@@ -63,15 +63,20 @@ public class JwtUtils {
      * @param authorities
      * @return
      */
-    public static String generateToken(String subject, Collection<? extends GrantedAuthority> authorities) {
+    public static String generateToken(Integer uid,String subject, Collection<? extends GrantedAuthority> authorities) {
         StringBuilder sb = new StringBuilder();
         for (GrantedAuthority authority : authorities) {
             sb.append(authority.getAuthority()).append(",");
         }
         System.out.println("---secretKey--" + secretKey);
         String jwt = Jwts.builder()
-                .setSubject(subject)
+                // header
+                .setHeaderParam("typ","JWT")
+                .setHeaderParam("alg","HS512")
+                // payload 载荷
+                .setSubject(subject) // 作者
                 .claim("authorities", sb)
+                .claim("id", uid)
                 .setExpiration(new Date(System.currentTimeMillis() + expireTime))
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();

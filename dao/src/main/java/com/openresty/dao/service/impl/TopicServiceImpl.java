@@ -46,7 +46,7 @@ public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements
 
         // 根据用户名查询用户信息
         LambdaQueryWrapper<Topic> wrapper = new LambdaQueryWrapper<>();
-        wrapper.like(Topic::getTitle, title);
+        wrapper.likeRight(Topic::getTitle, title);
         items = mp.selectList(wrapper);
         if (Objects.isNull(items)) {
             throw new NotFoundException("不存在");

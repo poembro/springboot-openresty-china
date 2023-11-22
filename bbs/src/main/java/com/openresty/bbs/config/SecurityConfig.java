@@ -23,8 +23,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	AuthServiceImpl userService;
 
-
-
 	@Bean //  定义了密码的加密方式
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -34,7 +32,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder());
 	}
-
 
 	// 注入一个 异常处理 类
 	@Autowired
@@ -52,6 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()
 
 		.antMatchers("/admin/login").anonymous() // 对于登录接口 允许匿名访问
+		.antMatchers("/login").anonymous() // 对于登录接口 允许匿名访问
 
 		.antMatchers("/doc.html").anonymous() // swagger 放行
 		.antMatchers("/webjars/**").anonymous() // swagger 放行

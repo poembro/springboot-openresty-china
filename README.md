@@ -20,6 +20,31 @@
 ## 接口文档
 
 
+### 重置密码 加密方式
+```
+
+> GET /login?userId=9 HTTP/1.1
+> Host: localhost:8081
+> User-Agent: insomnia/8.2.0
+> Accept: */*
+
+* Mark bundle as not supporting multiuse
+
+< HTTP/1.1 200 
+< Vary: Origin
+< Vary: Access-Control-Request-Method
+< Vary: Access-Control-Request-Headers
+< X-Content-Type-Options: nosniff
+< X-XSS-Protection: 1; mode=block
+< Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+< Pragma: no-cache
+< Expires: 0
+< X-Frame-Options: DENY
+< Content-Type: application/json
+< Transfer-Encoding: chunked
+< Date: Wed, 22 Nov 2023 03:27:22 GMT
+```
+
 ###  登录
 ```
 > POST /admin/login HTTP/1.1

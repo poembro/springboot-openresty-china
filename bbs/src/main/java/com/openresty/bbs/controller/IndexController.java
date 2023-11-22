@@ -37,25 +37,23 @@ public class IndexController {
 
     @Autowired     // 1. 字段注入
     private IUserService userService;
+
+
     @ApiOperation("login 获取token")
     @GetMapping("/login")
     public Result login(@RequestParam(defaultValue = "1") Integer userId) {
         User item = userService.getById(userId);
-        String newPwd =  passwordEncoder.encode(item.getPassword());
+        String newPwd =  passwordEncoder.encode("123456");
         item.setPassword(newPwd);
-        userService.updateById(item);
+        userService.updateById(item);  // 重置密码加密方式
 
         User resp = authService.findUserByName(item.getUsername());
         return  Result.ok("hello world " , resp);
     }
 
-
-
-
     @ApiOperation("hello")
     @GetMapping("/hello")
     public String sayHello(@RequestParam(required = false, name = "who2") String who) {
-
         return who;
     }
 

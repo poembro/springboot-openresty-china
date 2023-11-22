@@ -7,9 +7,14 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @Description: JWT工具类
@@ -18,6 +23,19 @@ import java.util.Date;
  */
 @Component
 public class JwtUtils {
+    public static String getHeader2(String name) {
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = (requestAttributes == null) ? null : ((ServletRequestAttributes) requestAttributes).getRequest();
+        return Objects.requireNonNull(request).getHeader(name);
+    }
+
+    public static String getHeader(String name) {
+        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+        ServletRequestAttributes sra = (ServletRequestAttributes) requestAttributes;
+        HttpServletRequest r = sra.getRequest();
+        return r.getHeader(name);
+    }
+
     private static long expireTime = 259200000;
     private static String secretKey = "abcdefghijklmnopqrstuvwxyz";
 
@@ -68,7 +86,6 @@ public class JwtUtils {
         for (GrantedAuthority authority : authorities) {
             sb.append(authority.getAuthority()).append(",");
         }
-        System.out.println("---secretKey--" + secretKey);
         String jwt = Jwts.builder()
                 // header
                 .setHeaderParam("typ","JWT")
@@ -76,7 +93,7 @@ public class JwtUtils {
                 // payload 载荷
                 .setSubject(subject) // 作者
                 .claim("authorities", sb)
-                .claim("id", uid)
+                .claim("uid", uid)
                 .setExpiration(new Date(System.currentTimeMillis() + expireTime))
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();

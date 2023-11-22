@@ -55,6 +55,7 @@ public class IndexController {
     @ApiOperation("hello")
     @GetMapping("/hello")
     public String sayHello(@RequestParam(required = false, name = "who2") String who) {
+
         return who;
     }
 

@@ -14,10 +14,11 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Description: JWT请求过滤器
@@ -40,16 +41,27 @@ public class JwtFilter extends GenericFilterBean {
 				Claims claims = JwtUtils.getTokenBody(jwt);
 				String username = claims.getSubject(); // 从jwt中获取用户
 				String role = (String) claims.get("authorities");
-
+                Integer uid = (Integer) claims.get("uid");
 				// 将用户和角色 存入SecurityContextHolder
 				List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(role);
 				UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, null, authorities);
 				SecurityContextHolder.getContext().setAuthentication(token);
 
-				filterChain.doFilter(servletRequest, servletResponse);
 
-				System.out.println("---验证token---username--"+username + "-------" + role);
+				// 将 uid 存起来 方便给后续handle 使用
+				HttpServletRequestWrapper requestWrapper = new HttpServletRequestWrapper(request) {
+					@Override
+					public String getHeader(String name) {
+						if (name.equals("uid")) {
+							return uid.toString();
+						}
+						return super.getHeader(name);
+					}
+				};
 
+				System.out.println("---验证token---username:"+username + "-------role:" + role + " ----uid:" + uid);
+
+				filterChain.doFilter(requestWrapper, servletResponse);
 				// https://www.cnblogs.com/yinjihuan/p/10888879.html
 				return;
 			} catch (Exception e) {

@@ -1,5 +1,6 @@
 package com.openresty.bbs.controller;
 
+import com.openresty.common.utils.JwtUtils;
 import com.openresty.common.utils.PageResult;
 import com.openresty.common.utils.Result;
 import com.openresty.dao.entity.Topic;
@@ -7,14 +8,20 @@ import com.openresty.dao.service.ITopicService;
 import io.swagger.annotations.ApiOperation;
 import net.sf.jsqlparser.statement.select.Top;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -39,10 +46,17 @@ public class TopicController {
         return Result.ok("请求成功", items);
     }
 
+
+
     @ApiOperation("list")
     @RequestMapping(value = "/list",method = RequestMethod.GET)
     public Result list(@RequestParam(defaultValue = "1") Integer pageNum,
                             @RequestParam(defaultValue = "5") Integer pageSize){
+
+        String uid = JwtUtils.getHeader("uid");
+
+        System.out.println("--------uid:" + uid);
+
         PageResult<Topic> items = svc.findList(pageNum, pageSize);
         return Result.ok("请求成功", items);
     }

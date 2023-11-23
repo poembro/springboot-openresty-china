@@ -6,7 +6,7 @@ spring:
     database: 2
     host: 10.0.41.145
     port: 6379
-    password: NOjyVFBqlCvhWM
+    password: poembro
     lettuce:
       pool:
         min-idle: 0
@@ -18,9 +18,9 @@ spring:
     url: jdbc:mysql://10.0.41.145:3306/openresty_china?useSSL=false&autoReconnect=true&characterEncoding=utf8
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: NOjyVFBqlCvhWM
+    password: poembro
 
-token :  # 加密密钥
+token :  # 加密密钥 NOjyVFBqlCvhWM
   secretKey: abcdefghijklmnopqrstuvwxyz
   expireTime: 3600   # token有效时长
 
